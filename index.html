@@ -121,7 +121,15 @@ body{font-family:'Poppins',sans-serif;background:#EEF2FF;min-height:100vh;}
 .cd.weekend{color:var(--red2);}
 .cd-ne{font-size:7px;opacity:.6;}
 .p-hero{background:linear-gradient(135deg,var(--blue),#303F9F);padding:24px 15px 32px;text-align:center;color:#fff;}
-.p-av{width:66px;height:66px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin:0 auto 10px;border:3px solid rgba(255,255,255,.35);}
+.p-av{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;margin:0 auto 10px;border:3px solid rgba(255,255,255,.4);overflow:hidden;position:relative;cursor:pointer;}
+.p-av img{width:100%;height:100%;object-fit:cover;}
+.edit-badge{position:absolute;bottom:2px;right:2px;background:var(--orange);color:#fff;width:22px;height:22px;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;}
+.si-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;overflow:hidden;}
+.si-av img{width:100%;height:100%;object-fit:cover;}
+.logo-ic{width:35px;height:35px;background:rgba(255,255,255,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;cursor:pointer;}
+.logo-ic img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.col-logo{width:46px;height:46px;background:rgba(255,255,255,.2);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid rgba(255,255,255,.3);flex-shrink:0;overflow:hidden;cursor:pointer;}
+.col-logo img{width:100%;height:100%;object-fit:cover;border-radius:11px;}
 .icard{background:#fff;border-radius:15px;padding:14px;margin:-16px 13px 11px;box-shadow:0 4px 20px rgba(0,0,0,.1);}
 .irow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F5F5;align-items:flex-start;}
 .irow:last-child{border-bottom:none;}
@@ -148,7 +156,7 @@ body{font-family:'Poppins',sans-serif;background:#EEF2FF;min-height:100vh;}
 <div class="header">
   <div class="header-top">
     <div class="logo-box">
-      <div class="logo-ic">🎓</div>
+      <div class="logo-ic" onclick="uploadLogo()" id="headerLogo" title="Logo थिच्नुस्">🎓</div>
       <div class="logo-tx">GMC हाजिरी<span>Gokuleshwar, Darchula</span></div>
     </div>
     <div class="hdr-right">
@@ -172,7 +180,7 @@ body{font-family:'Poppins',sans-serif;background:#EEF2FF;min-height:100vh;}
         <div class="caddr">📍 Gokuleshwar, Darchula</div>
         <div class="caddr" id="bsDate">वि.सं. २०८२</div>
       </div>
-      <div class="col-logo">🎓</div>
+      <div class="col-logo" onclick="uploadLogo()" id="heroLogo" title="Logo upload">🎓</div>
     </div>
     <div class="time-box">
       <div>
@@ -258,7 +266,10 @@ body{font-family:'Poppins',sans-serif;background:#EEF2FF;min-height:100vh;}
 <div class="screen" id="screen-staffprofile">
   <button class="btn grey sm" style="margin:11px 13px;" onclick="goScreen('staff')">← Back</button>
   <div class="p-hero">
-    <div class="p-av" id="spAv"></div>
+    <div class="p-av" id="spAv" onclick="uploadStaffPhoto()">
+      <span id="spAvText"></span>
+      <div class="edit-badge">📷</div>
+    </div>
     <div style="font-size:16px;font-weight:800;" id="spName"></div>
     <div style="font-size:11px;opacity:.8;margin-top:3px;" id="spRole"></div>
   </div>
@@ -278,414 +289,4 @@ body{font-family:'Poppins',sans-serif;background:#EEF2FF;min-height:100vh;}
       <select class="inp" id="lStaff"><option value="">-- Staff छान्नुस् --</option></select>
       <label class="lbl">Leave को प्रकार</label>
       <select class="inp" id="lType"><option>Sick Leave</option><option>Annual Leave</option><option>Casual Leave</option><option>Emergency Leave</option><option>Maternity Leave</option></select>
-      <label class="lbl">मिति देखि</label><input type="date" class="inp" id="lFrom"/>
-      <label class="lbl">मिति सम्म</label><input type="date" class="inp" id="lTo"/>
-      <label class="lbl">कारण</label>
-      <textarea class="inp" id="lReason" rows="2" placeholder="कारण..." style="resize:none;"></textarea>
-      <button class="btn" onclick="submitLeave()">📤 Submit</button>
-    </div>
-  </div>
-  <div style="padding:0 13px 7px;"><div class="sec-t">Leave History</div></div>
-  <div id="leaveList">
-    <div class="si" style="cursor:default;"><div style="font-size:26px;">📋</div><div><div class="si-name">Leave records यहाँ देखिन्छ</div><div class="si-role">माथिको form बाट request गर्नुस्</div></div></div>
-  </div>
-</div>
-
-<!-- REPORT -->
-<div class="screen" id="screen-report">
-  <div style="padding:11px 13px 7px;"><div class="sec-t">📊 Attendance Report</div></div>
-  <div class="card">
-    <div style="font-weight:700;color:var(--blue);margin-bottom:11px;">Month अनुसार Report</div>
-    <select class="inp" id="rMonth">
-      <option>Chaitra 2082</option><option>Falgun 2082</option><option>Magh 2082</option><option>Poush 2082</option>
-    </select>
-    <button class="btn" onclick="genReport()">📊 Report हेर्नुस्</button>
-  </div>
-  <div id="reportOut" style="padding:0 13px;overflow-x:auto;"></div>
-</div>
-
-<!-- CALENDAR -->
-<div class="screen" id="screen-calendar">
-  <div style="padding:11px 13px 4px;"><div class="sec-t">📅 नेपाली पात्रो - विक्रम संवत</div></div>
-  <div class="card">
-    <div class="cal-hdr">
-      <button class="btn grey sm" onclick="prevM()">‹ अघिल्लो</button>
-      <div style="text-align:center;">
-        <div style="font-weight:800;font-size:14px;" id="calNe">चैत्र २०८२</div>
-        <div style="font-size:10px;color:var(--sub);" id="calAd">March-April 2026</div>
-      </div>
-      <button class="btn sm" onclick="nextM()">अर्को ›</button>
-    </div>
-    <div class="cal-g">
-      <div class="cdn" style="color:var(--red2);">आइत</div><div class="cdn">सोम</div><div class="cdn">मंगल</div>
-      <div class="cdn">बुध</div><div class="cdn">बिही</div><div class="cdn">शुक्र</div>
-      <div class="cdn" style="color:var(--red2);">शनि</div>
-    </div>
-    <div class="cal-g" id="calGrid" style="margin-top:3px;"></div>
-    <div style="display:flex;gap:10px;margin-top:11px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:4px;font-size:10px;"><div style="width:10px;height:10px;background:var(--green3);border-radius:3px;"></div>Present</div>
-      <div style="display:flex;align-items:center;gap:4px;font-size:10px;"><div style="width:10px;height:10px;background:var(--red3);border-radius:3px;"></div>Absent</div>
-      <div style="display:flex;align-items:center;gap:4px;font-size:10px;"><div style="width:10px;height:10px;background:var(--orange3);border-radius:3px;"></div>Holiday/Sunday</div>
-      <div style="display:flex;align-items:center;gap:4px;font-size:10px;"><div style="width:10px;height:10px;background:var(--blue);border-radius:3px;"></div>आज</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="sec-t" style="margin-bottom:9px;">🎊 प्रमुख चाडपर्व (२०८२-२०८३)</div>
-    <div id="festivals"></div>
-  </div>
-</div>
-
-<!-- EVENTS -->
-<div class="screen" id="screen-events">
-  <div style="padding:11px 13px 5px;display:flex;justify-content:space-between;align-items:center;">
-    <div class="sec-t">📢 Campus Events</div>
-    <button class="btn sm" onclick="toggleEl('evForm')">+ थप्नुस्</button>
-  </div>
-  <div id="evForm" style="display:none;padding:0 13px 10px;">
-    <div class="card" style="margin:0;border:2px solid rgba(26,35,126,.15);">
-      <input class="inp" id="evT" placeholder="Event को नाम"/>
-      <input type="date" class="inp" id="evD"/>
-      <input class="inp" id="evTm" placeholder="समय (जस्तै: 10:00 AM)"/>
-      <select class="inp" id="evCat"><option>Academic</option><option>Cultural</option><option>Sports</option><option>Meeting</option><option>Holiday</option><option>Other</option></select>
-      <button class="btn" onclick="addEvent()">✅ Add Event</button>
-    </div>
-  </div>
-  <div id="evList">
-    <div style="background:#fff;border-radius:13px;padding:12px 14px;margin:0 13px 7px;box-shadow:0 1px 8px rgba(0,0,0,.05);border-left:4px solid var(--blue);">
-      <div style="font-weight:700;font-size:12px;">📋 Staff Meeting</div>
-      <div style="font-size:10px;color:var(--sub);margin-top:3px;">📅 Chaitra 15, 2082 · 🕐 10:00 AM · <span class="badge bb">Meeting</span></div>
-    </div>
-    <div style="background:#fff;border-radius:13px;padding:12px 14px;margin:0 13px 7px;box-shadow:0 1px 8px rgba(0,0,0,.05);border-left:4px solid var(--orange);">
-      <div style="font-weight:700;font-size:12px;">🎊 नयाँ वर्ष २०८३</div>
-      <div style="font-size:10px;color:var(--sub);margin-top:3px;">📅 Baisakh 1, 2083 · 🕐 All Day · <span class="badge by">Holiday</span></div>
-    </div>
-    <div style="background:#fff;border-radius:13px;padding:12px 14px;margin:0 13px 7px;box-shadow:0 1px 8px rgba(0,0,0,.05);border-left:4px solid var(--green2);">
-      <div style="font-weight:700;font-size:12px;">📚 Exam Routine</div>
-      <div style="font-size:10px;color:var(--sub);margin-top:3px;">📅 Chaitra 20, 2082 · 🕐 9:00 AM · <span class="badge bg">Academic</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="bnav">
-  <div class="bn active" onclick="goScreen('home')" id="bn-home"><span class="bn-ic">🏠</span>Home</div>
-  <div class="bn" onclick="goScreen('haajiri')" id="bn-haajiri"><span class="bn-ic">📋</span>हाजिरी</div>
-  <div class="bn" onclick="goScreen('staff')" id="bn-staff"><span class="bn-ic">👥</span>Staff</div>
-  <div class="bn" onclick="goScreen('leave')" id="bn-leave"><span class="bn-ic">🏖️</span>Leave</div>
-  <div class="bn" onclick="goScreen('calendar')" id="bn-calendar"><span class="bn-ic">📅</span>पात्रो</div>
-</div>
-</div>
-
-<script>
-const STAFF=[
-  {id:'GMC-T-PSM',name:'Parmal Singh Mahara',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof./Campus Chief',qual:'M.Ed/M.Phil',service:'Permanent',addr:'Marma Gaunpalika-1, Darchula',mobile:'9848837708',email:'psmahara11@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-PKJ',name:'Pradeep Kumar Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.A./B.Ed',service:'Permanent',addr:'Dilasaini-5, Baitadi',mobile:'9848877877',email:'pradeep01joshi@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-RCJ',name:'Ramesh Chandra Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.A./M.Ed/M.Phil',service:'Permanent',addr:'Lekam-5, Darchula',mobile:'9848821530',email:'ramesh20381212@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-BRB',name:'Bhakta Raj Bhatt',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.A./M.Ed/M.Phil',service:'Permanent',addr:'Lekam-1, Darchula',mobile:'9848813281',email:'bhattabraj@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-DSB',name:'Dhan Singh Bist',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.A./M.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9848782170',email:'dhanbist00000@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-KRJ',name:'Kabi Raj Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Ed/M.Phil',service:'Permanent',addr:'Dogadakedar-6, Baitadi',mobile:'9848842378',email:'kabirajj178@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-KRB',name:'Keshab Raj Bist',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'MBS',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9848821405',email:'bistakeshab@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-PMJ',name:'Paramanand Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Ed',service:'Permanent',addr:'Shailyashikhar-8, Darchula',mobile:'9848834300',email:'pmjoshi912@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-BRP',name:'Bhoj Raj Pant',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Ed',service:'Permanent',addr:'Lekam-6, Darchula',mobile:'9848750681',email:'brpant04@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-BSJ',name:'Basudev Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9858758080',email:'basudev1415@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-PBJ',name:'Prem Ballav Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Sc.',service:'Permanent',addr:'Shailyashikhar-7, Darchula',mobile:'9848858635',email:'joshiprem222@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-MBC',name:'Madan Bahadur Chand',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Sc/M.Phil',service:'Permanent',addr:'Shailyashikhar-3, Darchula',mobile:'9848781190',email:'mbc9521@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-BWB',name:'Bhuwaneshwori Bist',gender:'Female',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9823259604',email:'joshibhumi2013@gmail.com',color:'#880E4F'},
-  {id:'GMC-T-KPB',name:'Khagendra Prasad Bist',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'MBS',service:'Permanent',addr:'Shailyashikhar-7, Darchula',mobile:'9848862743',email:'kp.bista@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-RDP',name:'Ram Datt Pant',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'M.A.',service:'Permanent',addr:'Shailyashikhar-8, Darchula',mobile:'9848799422',email:'ramdattpant5@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-NBB',name:'Naresh Bahadur Bohara',gender:'Male',cat:'Teaching Staff',post:'Asst. Prof.',qual:'MBS',service:'Permanent',addr:'Dilashainai-3, Baitadi',mobile:'9848495800',email:'naresh2035@gmail.com',color:'#1565C0'},
-  {id:'GMC-T-GKP',name:'Gokrna Pathak',gender:'Male',cat:'Teaching Staff',post:'Asst. Lecturer',qual:'M.Ed',service:'Permanent',addr:'Lekam-4, Darchula',mobile:'9865874848',email:'agpthk02@gmail.com',color:'#1B5E20'},
-  {id:'GMC-T-KDJ',name:'Keshab Datt Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Lecturer',qual:'M.Ed',service:'Permanent',addr:'Shailyashikhar-7',mobile:'9848751282',email:'keshabjoshi62@gmail.com',color:'#1B5E20'},
-  {id:'GMC-T-BBP',name:'Birendra Bahadur Pal',gender:'Male',cat:'Teaching Staff',post:'Asst. Lecturer',qual:'M.Ed',service:'Permanent',addr:'Mahakali-6, Darchula',mobile:'9848837312',email:'palbiru57@gmail.com',color:'#1B5E20'},
-  {id:'GMC-T-PUN',name:'Purnendra Nath',gender:'Male',cat:'Teaching Staff',post:'Asst. Lecturer',qual:'M.Sc.',service:'Permanent',addr:'Dilasaini-5, Baitadi',mobile:'9851111952',email:'purnendranath00001@gmail.com',color:'#1B5E20'},
-  {id:'GMC-T-RPJ',name:'Ramesh Prasad Joshi',gender:'Male',cat:'Teaching Staff',post:'Asst. Lecturer',qual:'M.Sc.',service:'Permanent',addr:'Shailyashikhar-9',mobile:'9848772864',email:'gmc2064@gmail.com',color:'#1B5E20'},
-  {id:'GMC-T-NKB',name:'Nirmala Kumari Bhatt',gender:'Female',cat:'Teaching Staff',post:'Part Time',qual:'M.Ed',service:'Permanent',addr:'Dogadakedar-5',mobile:'9848819882',email:'—',color:'#880E4F'},
-  {id:'GMC-T-NPJ',name:'Naresh Prasad Joshi',gender:'Male',cat:'Teaching Staff',post:'Part Time',qual:'M.Ed',service:'Permanent',addr:'Bhimdatt Municipality-6',mobile:'9848701708',email:'naresh2035@gmail.com',color:'#4A148C'},
-  {id:'GMC-T-GMB',name:'Gobinda Mani Bhatt',gender:'Male',cat:'Teaching Staff',post:'Part Time',qual:'M.A./M.Ed',service:'Part Time',addr:'Shailyashikhar-9',mobile:'—',email:'bhattgm2013@gmail.com',color:'#4A148C'},
-  {id:'GMC-T-UMB',name:'Uma Bhandari',gender:'Female',cat:'Teaching Staff',post:'Part Time',qual:'M.Ed',service:'Part Time',addr:'Shailyashikhar-9',mobile:'9868747434',email:'—',color:'#880E4F'},
-  {id:'GMC-T-TRP',name:'Tirth Raj Pant',gender:'Male',cat:'Teaching Staff',post:'Part Time',qual:'M.Sc',service:'Part Time',addr:'Shailyashikhar-8',mobile:'9843238664',email:'—',color:'#4A148C'},
-  {id:'GMC-N-NPB',name:'Narendra Parsad Bist',gender:'Male',cat:'NonTeachingStaff',post:'Head Assistant',qual:'M.Ed.',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9858751722',email:'narendraprasadbist@fwu.edu.np',color:'#E65100'},
-  {id:'GMC-N-MSB',name:'Man Singh Bist',gender:'Male',cat:'NonTeachingStaff',post:'Head Assistant',qual:'M.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9865988404',email:'mbist715@gmail.com',color:'#E65100'},
-  {id:'GMC-N-JC',name:'Janaki Chand',gender:'Female',cat:'NonTeachingStaff',post:'Head Assistant',qual:'BBS',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9867590360',email:'janakichand2077@gmail.com',color:'#BF360C'},
-  {id:'GMC-N-DC',name:'Dropati Chand',gender:'Female',cat:'NonTeachingStaff',post:'Head Assistant',qual:'B.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9865804163',email:'—',color:'#BF360C'},
-  {id:'GMC-N-PB',name:'Prakash Bist',gender:'Male',cat:'NonTeachingStaff',post:'Head Assistant',qual:'B.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9848839309',email:'bistpb@gmail.com',color:'#E65100'},
-  {id:'GMC-N-MB',name:'Mahadev Bist',gender:'Male',cat:'NonTeachingStaff',post:'Office Assistant',qual:'I.Ed',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9848713549',email:'—',color:'#558B2F'},
-  {id:'GMC-N-GB',name:'Ganesh Bist',gender:'Male',cat:'NonTeachingStaff',post:'Office Assistant',qual:'8 Pass',service:'Permanent',addr:'Shailyashikhar-9, Darchula',mobile:'9865666841',email:'—',color:'#558B2F'},
-  {id:'GMC-N-RB',name:'Rajmati Bist',gender:'Female',cat:'NonTeachingStaff',post:'Office Assistant',qual:'I.Ed',service:'Contact Based',addr:'Shailyashikhar-9, Darchula',mobile:'9865630442',email:'—',color:'#6A1B9A'},
-  {id:'GMC-N-DB',name:'Dhane Badi',gender:'Male',cat:'NonTeachingStaff',post:'Sweeper',qual:'Literate',service:'Contact Based',addr:'Shailyashikhar-9, Darchula',mobile:'9762778758',email:'—',color:'#37474F'},
-];
-
-let attState={};
-STAFF.forEach(s=>attState[s.id]=null);
-
-window.addEventListener('load',()=>{
-  setTimeout(()=>{const sp=document.getElementById('splash');sp.style.opacity='0';setTimeout(()=>sp.style.display='none',600);},2400);
-});
-
-const nepMs=['बैशाख','जेठ','असार','श्रावण','भाद्र','आश्विन','कार्तिक','मंसिर','पुष','माघ','फाल्गुन','चैत्र'];
-const nepDs=['आइतबार','सोमबार','मंगलबार','बुधबार','बिहीबार','शुक्रबार','शनिबार'];
-const nN=['०','१','२','३','४','५','६','७','८','९'];
-function toN(n){return String(n).split('').map(d=>nN[+d]).join('');}
-function adToBS(ad){
-  const ref=new Date(2026,3,7);
-  let diff=Math.round((ad-ref)/(864e5));
-  const dM=[31,31,32,31,31,31,30,29,30,29,30,30];
-  let y=2082,m=12,d=25;
-  d+=diff;
-  while(d>dM[m-1]){d-=dM[m-1];m++;if(m>12){m=1;y++;}}
-  while(d<1){m--;if(m<1){m=12;y--;}d+=dM[m-1];}
-  return{y,m,d};
-}
-function tick(){
-  const now=new Date();
-  document.getElementById('clockD').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('adDate').textContent=now.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'long',year:'numeric'});
-  const bs=adToBS(now);
-  document.getElementById('nepDay').textContent=nepDs[now.getDay()]+' | '+toN(bs.d)+' '+nepMs[bs.m-1]+' '+toN(bs.y);
-  document.getElementById('bsDate').textContent='वि.सं. '+toN(bs.y)+' '+nepMs[bs.m-1]+' '+toN(bs.d);
-  document.getElementById('todayDateH').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})+' | '+nepDs[now.getDay()]+' '+toN(bs.d)+' '+nepMs[bs.m-1]+' '+toN(bs.y);
-}
-setInterval(tick,1000);tick();
-
-function showNotif(msg,color='#1a237e'){
-  const el=document.getElementById('notif');
-  el.textContent=msg;el.style.background=color;el.style.display='block';
-  clearTimeout(window._nt);window._nt=setTimeout(()=>el.style.display='none',3000);
-}
-function goScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.bn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-  const bn=document.getElementById('bn-'+id);if(bn)bn.classList.add('active');
-  window.scrollTo(0,0);
-}
-function tabSw(id,el){document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));el.classList.add('active');goScreen(id);}
-function toggleEl(id){const el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none';}
-function getInit(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();}
-
-let ciDone=false;
-function doCI(){
-  if(ciDone)return;ciDone=true;
-  const t=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('stIn').textContent=t;
-  document.getElementById('stSt').textContent='🟢 Present';
-  document.getElementById('stSt').style.color='var(--green)';
-  document.getElementById('btnIn').disabled=true;document.getElementById('btnOut').disabled=false;
-  showNotif('✅ Check In! समय: '+t,'#2E7D32');
-}
-function doCO(){
-  if(!ciDone)return;ciDone=false;
-  const t=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('stOut').textContent=t;
-  document.getElementById('stSt').textContent='✅ Done';document.getElementById('stSt').style.color='var(--blue)';
-  document.getElementById('btnIn').disabled=false;document.getElementById('btnOut').disabled=true;
-  showNotif('👋 Check Out! समय: '+t,'#C62828');
-}
-
-function renderStaff(list,cid,withAtt){
-  if(!list.length){document.getElementById(cid).innerHTML='<div style="text-align:center;padding:28px;color:var(--sub);">कोही भेटिएन</div>';return;}
-  document.getElementById(cid).innerHTML=list.map(s=>{
-    const init=getInit(s.name);
-    if(withAtt){
-      const cur=attState[s.id];
-      return`<div class="si" onclick="openProfile('${s.id}')">
-        <div class="si-av" style="background:${s.color};">${init}</div>
-        <div style="flex:1;min-width:0;"><div class="si-name">${s.name}</div><div class="si-role">${s.post}</div><div class="si-id">${s.id}</div></div>
-        <div class="att-btns" onclick="event.stopPropagation()">
-          <button class="ab p ${cur==='P'?'sp':''}" onclick="setAtt('${s.id}','P',this)">P</button>
-          <button class="ab a ${cur==='A'?'sa':''}" onclick="setAtt('${s.id}','A',this)">A</button>
-          <button class="ab l ${cur==='L'?'sl':''}" onclick="setAtt('${s.id}','L',this)">L</button>
-          <button class="ab h ${cur==='H'?'sh':''}" onclick="setAtt('${s.id}','H',this)">H</button>
-        </div></div>`;
-    }else{
-      const cb=s.cat==='Teaching Staff'?'<span class="badge bb">Teaching</span>':'<span class="badge by">Non-Teaching</span>';
-      return`<div class="si" onclick="openProfile('${s.id}')">
-        <div class="si-av" style="background:${s.color};">${init}</div>
-        <div style="flex:1;"><div class="si-name">${s.name}</div><div class="si-role">${s.post} · ${s.qual}</div><div class="si-id">${s.id} · ${s.mobile}</div></div>
-        <div>${cb}</div></div>`;
-    }
-  }).join('');
-}
-
-function setAtt(id,status,btn){
-  attState[id]=status;
-  const row=btn.closest('.att-btns');
-  row.querySelectorAll('.ab').forEach(b=>b.classList.remove('sp','sa','sl','sh'));
-  btn.classList.add({P:'sp',A:'sa',L:'sl',H:'sh'}[status]);
-  updateStats();
-}
-function updateStats(){
-  let p=0,a=0,l=0,h=0;
-  Object.values(attState).forEach(v=>{if(v==='P')p++;else if(v==='A')a++;else if(v==='L')l++;else if(v==='H')h++;});
-  ['stP','stA','stL','stH'].forEach((id,i)=>document.getElementById(id).textContent=[p,a,l,h][i]);
-}
-function markAll(){STAFF.forEach(s=>attState[s.id]='P');renderAttList(curFilter);updateStats();showNotif('✅ सबैलाई Present mark गरियो!','#2E7D32');}
-function saveAtt(){
-  let none=Object.values(attState).filter(v=>!v).length;
-  if(none>0){showNotif('⚠️ '+none+' जनाको हाजिरी भरिएको छैन!','#E65100');return;}
-  let p=Object.values(attState).filter(v=>v==='P').length;
-  showNotif('💾 हाजिरी Save भयो! Present: '+p+'/35','#2E7D32');
-}
-
-let curFilter='all';
-function filterAtt(f,el){
-  curFilter=f;document.querySelectorAll('.tp').forEach(t=>{t.classList.remove('on');t.classList.add('off');});
-  el.classList.add('on');el.classList.remove('off');renderAttList(f);
-}
-function renderAttList(f){
-  let list=f==='teaching'?STAFF.filter(s=>s.cat==='Teaching Staff'):f==='nonteaching'?STAFF.filter(s=>s.cat==='NonTeachingStaff'):STAFF;
-  renderStaff(list,'staffAttList',true);
-}
-function searchAtt(q){
-  renderStaff(STAFF.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||s.id.toLowerCase().includes(q.toLowerCase())),'staffAttList',true);
-}
-function filterStaff(f,el){
-  document.querySelectorAll('.tp').forEach(t=>{t.classList.remove('on');t.classList.add('off');});
-  el.classList.add('on');el.classList.remove('off');
-  renderStaff(f==='all'?STAFF:STAFF.filter(s=>s.cat===f),'staffList',false);
-}
-function searchStaffList(q){
-  renderStaff(STAFF.filter(s=>s.name.toLowerCase().includes(q.toLowerCase())||s.post.toLowerCase().includes(q.toLowerCase())||s.id.toLowerCase().includes(q.toLowerCase())),'staffList',false);
-}
-
-function openProfile(id){
-  const s=STAFF.find(x=>x.id===id);if(!s)return;
-  const init=getInit(s.name);
-  document.getElementById('spAv').textContent=init;document.getElementById('spAv').style.background=s.color;
-  document.getElementById('spName').textContent=s.name;
-  document.getElementById('spRole').textContent=s.post+' · Gokuleshwar Multiple Campus';
-  const att=attState[s.id];
-  const attB=att?`<span class="badge ${att==='P'?'bg':att==='A'?'br':att==='L'?'by':'bb'}">${{P:'Present',A:'Absent',L:'Leave',H:'Holiday'}[att]}</span>`:'<span class="badge bpp">Not Marked</span>';
-  document.getElementById('spInfo').innerHTML=`
-    <div style="font-weight:700;color:var(--blue);margin-bottom:10px;font-size:13px;">Staff विवरण</div>
-    <div class="irow"><span class="il">Unique ID</span><span class="iv">${s.id}</span></div>
-    <div class="irow"><span class="il">लिङ्ग</span><span class="iv">${s.gender}</span></div>
-    <div class="irow"><span class="il">Category</span><span class="iv">${s.cat}</span></div>
-    <div class="irow"><span class="il">पद</span><span class="iv">${s.post}</span></div>
-    <div class="irow"><span class="il">योग्यता</span><span class="iv">${s.qual}</span></div>
-    <div class="irow"><span class="il">Service</span><span class="iv">${s.service}</span></div>
-    <div class="irow"><span class="il">ठेगाना</span><span class="iv">${s.addr}</span></div>
-    <div class="irow"><span class="il">📱 Mobile</span><span class="iv"><a href="tel:${s.mobile}" style="color:var(--blue);">${s.mobile}</a></span></div>
-    <div class="irow"><span class="il">📧 Email</span><span class="iv" style="font-size:10px;">${s.email}</span></div>
-    <div class="irow"><span class="il">आजको हाजिरी</span><span class="iv">${attB}</span></div>`;
-  goScreen('staffprofile');
-}
-
-function populateLeaveStaff(){
-  document.getElementById('lStaff').innerHTML='<option value="">-- Staff छान्नुस् --</option>'+
-    STAFF.map(s=>`<option value="${s.id}">${s.name} (${s.id})</option>`).join('');
-}
-function submitLeave(){
-  const staff=document.getElementById('lStaff').value;
-  const type=document.getElementById('lType').value;
-  const from=document.getElementById('lFrom').value;
-  const to=document.getElementById('lTo').value;
-  const reason=document.getElementById('lReason').value;
-  if(!staff||!from||!to||!reason){showNotif('⚠️ सबै field भर्नुस्!','#E65100');return;}
-  const s=STAFF.find(x=>x.id===staff);
-  const fd=new Date(from).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  const td=new Date(to).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-  const row=`<div class="si" style="cursor:default;"><div class="si-av" style="background:${s.color};">${getInit(s.name)}</div>
-    <div style="flex:1;"><div class="si-name">${s.name}</div><div class="si-role">${type} · ${fd} – ${td}</div></div>
-    <span class="badge by">Pending</span></div>`;
-  document.getElementById('leaveList').insertAdjacentHTML('afterbegin',row);
-  ['lStaff','lFrom','lTo','lReason'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('leaveForm').style.display='none';
-  showNotif('📋 Leave Request पठाइयो!','#1a237e');
-}
-
-function genReport(){
-  const month=document.getElementById('rMonth').value;
-  let html=`<div class="card" style="margin:0 0 12px;overflow-x:auto;">
-    <div style="font-weight:700;color:var(--blue);margin-bottom:11px;font-size:13px;">${month} - Attendance Report</div>
-    <table class="rtable"><tr><th>#</th><th>नाम</th><th>पद</th><th>P</th><th>A</th><th>L</th><th>%</th></tr>`;
-  STAFF.forEach((s,i)=>{
-    const p=Math.floor(Math.random()*5)+20;const a=Math.floor(Math.random()*3);const l=Math.floor(Math.random()*2);
-    const pct=Math.round(p/(p+a+l)*100);
-    const c=pct>=90?'var(--green)':pct>=75?'var(--orange)':'var(--red2)';
-    html+=`<tr><td>${i+1}</td><td>${s.name}</td><td style="font-size:9px;">${s.post}</td><td style="color:var(--green);font-weight:700;">${p}</td><td style="color:var(--red2);font-weight:700;">${a}</td><td style="color:var(--orange);font-weight:700;">${l}</td><td style="color:${c};font-weight:800;">${pct}%</td></tr>`;
-  });
-  html+='</table></div>';
-  document.getElementById('reportOut').innerHTML=html;
-  showNotif('📊 Report तयार भयो!','#1a237e');
-}
-
-// NEPALI CALENDAR
-const bsMs=['बैशाख','जेठ','असार','श्रावण','भाद्र','आश्विन','कार्तिक','मंसिर','पुष','माघ','फाल्गुन','चैत्र'];
-const adMs=['April-May','May-June','June-July','July-Aug','Aug-Sep','Sep-Oct','Oct-Nov','Nov-Dec','Dec-Jan','Jan-Feb','Feb-Mar','Mar-Apr'];
-const bsDays=[31,31,32,31,31,31,30,29,30,29,30,30];
-let cal={y:2082,m:11};
-function renderCal(){
-  document.getElementById('calNe').textContent=bsMs[cal.m]+' '+toN(cal.y);
-  document.getElementById('calAd').textContent=adMs[cal.m]+' 2026';
-  const now=new Date();const bs=adToBS(now);
-  const days=bsDays[cal.m];
-  const firstDay=(cal.m===11)?6:(cal.m+2)%7;
-  let html='';
-  for(let i=0;i<firstDay;i++)html+='<div class="cd"></div>';
-  for(let d=1;d<=days;d++){
-    let cls='cd';
-    const isToday=d===bs.d&&cal.m===bs.m-1&&cal.y===bs.y;
-    const dow=(firstDay+d-1)%7;
-    if(isToday)cls+=' today';
-    else if(dow===0)cls+=' holiday weekend';
-    else if([1,3,5,7,10,12,15,18,20,22,25,27,29].includes(d))cls+=' present';
-    else if([4,9,16].includes(d))cls+=' absent';
-    html+=`<div class="${cls}">${toN(d)}<span class="cd-ne">${d}</span></div>`;
-  }
-  document.getElementById('calGrid').innerHTML=html;
-}
-function prevM(){if(cal.m>0)cal.m--;else{cal.m=11;cal.y--;}renderCal();}
-function nextM(){if(cal.m<11)cal.m++;else{cal.m=0;cal.y++;}renderCal();}
-renderCal();
-
-// Festivals
-const fests=[
-  {n:'विश्वकर्मा पूजा',d:'भाद्र १७, २०८२',t:'bg'},
-  {n:'इन्द्र जात्रा',d:'भाद्र २०, २०८२',t:'bg'},
-  {n:'दशैं (घटस्थापना)',d:'आश्विन १, २०८२',t:'major'},
-  {n:'विजयादशमी (दशैं)',d:'आश्विन १०, २०८२',t:'major'},
-  {n:'लक्ष्मी पूजा (तिहार)',d:'कार्तिक १४, २०८२',t:'major'},
-  {n:'छठ पर्व',d:'कार्तिक २०, २०८२',t:'bg'},
-  {n:'राष्ट्रिय एकता दिवस',d:'पुष २७, २०८२',t:'bb'},
-  {n:'शिवरात्री',d:'फाल्गुन ७, २०८२',t:'bg'},
-  {n:'फागु पूर्णिमा (होली)',d:'फाल्गुन ३०, २०८२',t:'bg'},
-  {n:'🎊 नयाँ वर्ष २०८३',d:'बैशाख १, २०८३',t:'major'},
-];
-document.getElementById('festivals').innerHTML=fests.map(f=>{
-  const icon=f.t==='major'?'🎊':f.t==='bb'?'🇳🇵':'🙏';
-  const badge=f.t==='major'?'<span class="badge by">Main Festival</span>':f.t==='bb'?'<span class="badge bb">National</span>':'<span class="badge bg">Festival</span>';
-  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F5F5F5;">
-    <div><div style="font-size:12px;font-weight:600;">${icon} ${f.n}</div><div style="font-size:10px;color:var(--sub);margin-top:1px;">${f.d}</div></div>${badge}</div>`;
-}).join('');
-
-// Events
-function addEvent(){
-  const t=document.getElementById('evT').value;const d=document.getElementById('evD').value;
-  const tm=document.getElementById('evTm').value||'TBD';const cat=document.getElementById('evCat').value;
-  if(!t||!d){showNotif('⚠️ Title र Date भर्नुस्!','#E65100');return;}
-  const dd=new Date(d);const bs=adToBS(dd);
-  const bsStr=toN(bs.d)+' '+bsMs[bs.m-1]+' '+toN(bs.y);
-  const colors={Academic:'var(--blue)',Cultural:'var(--purple)',Sports:'var(--green2)',Meeting:'var(--orange)',Holiday:'#E65100',Other:'var(--sub)'};
-  const badges={Academic:'bb',Cultural:'bpp',Sports:'bg',Meeting:'by',Holiday:'by',Other:'bb'};
-  const row=`<div style="background:#fff;border-radius:13px;padding:12px 14px;margin:0 13px 7px;box-shadow:0 1px 8px rgba(0,0,0,.05);border-left:4px solid ${colors[cat]||'var(--blue)'};">
-    <div style="font-weight:700;font-size:12px;">📌 ${t}</div>
-    <div style="font-size:10px;color:var(--sub);margin-top:3px;">📅 ${bsStr} (${d}) · 🕐 ${tm} · <span class="badge ${badges[cat]||'bb'}">${cat}</span></div></div>`;
-  document.getElementById('evList').insertAdjacentHTML('afterbegin',row);
-  ['evT','evD','evTm'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('evForm').style.display='none';
-  showNotif('🎉 Event थपियो!','#1a237e');
-}
-
-// Quick Staff
-document.getElementById('quickStaff').innerHTML=STAFF.slice(0,4).map(s=>`
-  <div class="si" onclick="openProfile('${s.id}')">
-    <div class="si-av" style="background:${s.color};">${getInit(s.name)}</div>
-    <div><div class="si-name">${s.name}</div><div class="si-role">${s.post}</div><div class="si-id">${s.id} · ${s.mobile}</div></div>
-  </div>`).join('');
-
-renderStaff(STAFF,'staffList',false);
-renderStaff(STAFF,'staffAttList',true);
-populateLeaveStaff();
-</script>
-</body>
-</html>
+      <label class="lbl">मिति देखि</label><input type="date" class="inp" id
